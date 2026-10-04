@@ -14,7 +14,7 @@ const SYSTEM: Record<GenKind, string> = {
 };
 
 export async function generateContent(kind: GenKind, input: string, tone: string) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env['LOVABLE_API_KEY'];
   if (!apiKey) throw new Error("AI is not configured.");
   const runIdFetch = createLovableAiGatewayRunIdFetch();
   const provider = createOpenAI({

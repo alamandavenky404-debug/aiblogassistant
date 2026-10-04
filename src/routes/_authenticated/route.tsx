@@ -26,7 +26,7 @@ function AppShell() {
   if (loading || !session) {
     return <div className="min-h-screen grid place-items-center bg-paper label-mono">loading desk…</div>;
   }
-  const name = (user?.email ?? "writer").split("@")[0];
+  const name = (user?.email ?? "writer").split("@")[0] ?? "writer";
 
   return (
     <div className="min-h-screen w-full bg-paper text-ink">
