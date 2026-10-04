@@ -68,7 +68,7 @@ function AppShell() {
                 activeProps={{ className: "!bg-ink !text-paper" }}
               >
                 <span className="flex items-center gap-3">
-                  <span className="h-4 w-[3px] bg-transparent group-[.active]:bg-accent group-hover:bg-accent" />
+                  <span className="h-4 w-[3px] bg-transparent group-data-[status=active]:bg-accent group-hover:bg-accent" />
                   {n.label}
                 </span>
                 <span className="font-mono text-[10px] opacity-50">({n.key})</span>

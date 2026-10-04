@@ -10,33 +10,94 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
+import { Route as AuthenticatedSummarizeRouteImport } from './routes/_authenticated/summarize'
+import { Route as AuthenticatedTitlesRouteImport } from './routes/_authenticated/titles'
+import { Route as AuthenticatedWriteRouteImport } from './routes/_authenticated/write'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSummarizeRoute = AuthenticatedSummarizeRouteImport.update({
+  id: '/summarize',
+  path: '/summarize',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTitlesRoute = AuthenticatedTitlesRouteImport.update({
+  id: '/titles',
+  path: '/titles',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedWriteRoute = AuthenticatedWriteRouteImport.update({
+  id: '/write',
+  path: '/write',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/summarize': typeof AuthenticatedSummarizeRoute
+  '/titles': typeof AuthenticatedTitlesRoute
+  '/write': typeof AuthenticatedWriteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/summarize': typeof AuthenticatedSummarizeRoute
+  '/titles': typeof AuthenticatedTitlesRoute
+  '/write': typeof AuthenticatedWriteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/summarize': typeof AuthenticatedSummarizeRoute
+  '/_authenticated/titles': typeof AuthenticatedTitlesRoute
+  '/_authenticated/write': typeof AuthenticatedWriteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/auth' | '/library' | '/summarize' | '/titles' | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/auth' | '/library' | '/summarize' | '/titles' | '/write'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/library'
+    | '/_authenticated/summarize'
+    | '/_authenticated/titles'
+    | '/_authenticated/write'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +109,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/library': {
+      id: '/_authenticated/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/summarize': {
+      id: '/_authenticated/summarize'
+      path: '/summarize'
+      fullPath: '/summarize'
+      preLoaderRoute: typeof AuthenticatedSummarizeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/titles': {
+      id: '/_authenticated/titles'
+      path: '/titles'
+      fullPath: '/titles'
+      preLoaderRoute: typeof AuthenticatedTitlesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/write': {
+      id: '/_authenticated/write'
+      path: '/write'
+      fullPath: '/write'
+      preLoaderRoute: typeof AuthenticatedWriteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedSummarizeRoute: typeof AuthenticatedSummarizeRoute
+  AuthenticatedTitlesRoute: typeof AuthenticatedTitlesRoute
+  AuthenticatedWriteRoute: typeof AuthenticatedWriteRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedSummarizeRoute: AuthenticatedSummarizeRoute,
+  AuthenticatedTitlesRoute: AuthenticatedTitlesRoute,
+  AuthenticatedWriteRoute: AuthenticatedWriteRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
