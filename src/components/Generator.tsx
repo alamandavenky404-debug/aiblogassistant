@@ -35,7 +35,7 @@ export function Generator(p: Props) {
   ).length;
 
   async function go() {
-    if (input.trim().length < 3) return toast.error("Give the AI a bit more to work with.");
+    if (input.trim().length < 3) { toast.error("Give the AI a bit more to work with."); return; }
     setBusy(true);
     setOutput("");
     try {
